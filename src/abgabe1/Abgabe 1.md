@@ -1,4 +1,4 @@
-# Aufgabe 1
+# Aufgabe 1a
 
 1)  **Installieren Sie Oracle VM VirtualBox (Base Package). VirtualBox läuft auf Windows- Linux- und MacOS-Host. Beachten Sie bitte die Lizenzbedingungen.**
 2) **Nutzen Sie VirtualBox, um zwei virtuelle Maschinen aufzusetzen**
@@ -58,3 +58,62 @@
   glibc-Libs sind wieder da: <br>
   ![1.11.png](img/1.11.png)
 
+# Aufgabe 1b
+````powershell
+--- Variablen-Definition ---
+# $VM_Name    = "teipe"
+# $Net_Name   = "teipe_net"
+# $Net_Range  = "10.11.33.0/24"
+# $ISOPath    = "C:\Users\Nils Teipel\Downloads\ubuntu-24.04.3-live-server-amd64.iso"
+# $VM_DIR     = "C:\Users\Nils Teipel\VirtualBox VMs"
+# $DiskPath   = Join-Path $VM_DIR "$VM_Name.vdi"
+
+# $RAM        = 4096
+# $VRAM       = 16
+# $CPUs       = 2
+
+# Write-Host "--- Vorbereitung: Cleanup alter Ressourcen ---" -ForegroundColor Yellow
+
+1. Cleanup: Falls die VM läuft, ausschalten und löschen (Fehler werden mit 2>$null unterdrückt)
+# VBoxManage controlvm $VM_Name poweroff 2>$null
+# VBoxManage unregistervm $VM_Name --delete 2>$null
+# VBoxManage natnetwork remove --netname $Net_Name 2>$null
+
+# Write-Host "--- Starte VM-Erzeugung: $VM_Name ---" -ForegroundColor Cyan
+
+2. NAT-Netzwerk anlegen für die IP-Adressvergabe
+# VBoxManage natnetwork add --netname $Net_Name --network $Net_Range --dhcp on
+
+3. VM registrieren
+# VBoxManage createvm --name $VM_Name --ostype "Ubuntu_64" --register
+
+4. Hardware-Parameter setzen und Netzwerkadapter festlegen
+# VBoxManage modifyvm $VM_Name `
+    # --cpus $CPUs `
+    # --memory $RAM `
+    # --vram $VRAM `
+    # --graphicscontroller vmsvga `
+    # --nic1 natnetwork `
+    # --natnet1 $Net_Name
+
+5. Virtuelle Festplatte erstellen
+# VBoxManage createmedium disk --filename $DiskPath --size 20000
+
+6. Storage-Controller hinzufügen
+# VBoxManage storagectl $VM_Name --name "SATA_Controller" --add sata --controller IntelAhci
+# VBoxManage storagectl $VM_Name --name "IDE_Controller" --add ide
+
+7. Medien (HDD & ISO) einbinden
+# VBoxManage storageattach $VM_Name --storagectl "SATA_Controller" --port 0 --device 0 --type hdd --medium $DiskPath
+# VBoxManage storageattach $VM_Name --storagectl "IDE_Controller" --port 0 --device 0 --type dvddrive --medium $ISOPath
+
+8. Boot-Reihenfolge festlegen
+# VBoxManage modifyvm $VM_Name --boot1 dvd --boot2 disk
+
+9. VM starten
+# VBoxManage startvm $VM_Name --type gui
+
+# Write-Host "Erfolgreich! Die VM $VM_Name wird gestartet." -ForegroundColor Green
+````
+Quelle: Foliensatz + Gemini <br>
+![1.12.png](img/1.12.png)
