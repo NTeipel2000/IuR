@@ -59,6 +59,12 @@
   ![1.11.png](img/1.11.png)
 
 # Aufgabe 1b
+Vorarbeiten:
+- Installation von VirtualBox
+- Download Ubuntu ISO
+- Skripte in der PowerShell aktivieren
+- VirtualBox Pfad zur Umgebungsvariable `Path` hinzufügen
+
 ````powershell
 --- Variablen-Definition ---
 # $VM_Name    = "teipe"
