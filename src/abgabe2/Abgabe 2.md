@@ -1,11 +1,11 @@
 # Aufgabe 2a
 
-Schauen Sie sich das Modul Random von HashiCorp an (https://registry.terraform.io/providers/hashicorp/random/latest/docs)
-• Schreiben sie eine Terraform-Anwendung, die folgende Werte in der Konsole ausgibt-
-• Ein zufälliges Passwort (20 Zeichen lang, Klein- und Großbuchstaben, Zahlen und Sonderzeichen)
-• Einen zufälligen Haustiernamen.
-• Benutzen sie drei .tf-Dateien: (Quellen in den Source-Files)
-• Terraform-Konfiguration (z.B. providers.tf)
+**Schauen Sie sich das Modul Random von HashiCorp an (https://registry.terraform.io/providers/hashicorp/random/latest/docs)**
+- Schreiben sie eine Terraform-Anwendung, die folgende Werte in der Konsole ausgibt-
+- Ein zufälliges Passwort (20 Zeichen lang, Klein- und Großbuchstaben, Zahlen und Sonderzeichen)
+- Einen zufälligen Haustiernamen.
+- Benutzen sie drei .tf-Dateien: (Quellen in den Source-Files)
+- Terraform-Konfiguration (z.B. providers.tf)
 ````terraform
 terraform {
   required_providers {
@@ -50,8 +50,20 @@ Das Passwort wird mit standardmäßig als `<Sensitive>` angezeigt, aber mit `non
 
 # Aufgabe 2b
 
-Erstellung sie IaC mittels LLMs.
-• Verwenden Sie ein LLM ihrer Wahl, um mit dem unten angegebenen Prompt eine Infrastruktur für Terraform und AWS zu erstellen.
-• Was können sie bemerken, wenn sie den Prompt mehrfach auf dam gleichen Modell (LLM) anwenden?
-• Überführen sie den Code des LLMs in lokale Dateien, um diesen auf der Festplatte zu speichern und in Terraform ausführen zu können.
-Prompt: `I need a Web Service running on an EC2 and I need to send emails via Amazon SNS. Could you provide me with the terraform code`
+**Erstellung sie IaC mittels LLMs**
+- Verwenden Sie ein LLM Ihrer Wahl, um mit dem unten angegebenen Prompt eine Infrastruktur für Terraform und AWS zu erstellen.
+  - Gewähltes LLM: `ChatGPT`
+- Was können Sie bemerken, wenn sie den Prompt mehrfach auf das gleiche Modell (LLM) anwenden?
+  - 1 und 2 haben einen modularen Ansatz, bei dem Ressourcen, wie IAM-Rollen, Security Groups und die EC2-Instanz in separate Dateien aufgeteilt wurden
+  - 3 hat einen Single-File-Ansatz und fast die gesamte Logik in eine einzige Datei geschrieben.
+  - Bei allen drei Iterationen ist die Nutzung der AWS-Ressourcen konsistent.
+  - Detailunterschiede, wie Benennung der Variablen und Separation der Variablen.
+  - 1 und 2 fragen nach einem EC2-Key-Pair-Namen und 3 fragt nach einer IP für SSH-Zugriff.
+- Überführen Sie den Code des LLMs in lokale Dateien, um diesen auf der Festplatte zu speichern und in Terraform ausführen zu können.
+  - [firstLLMIteration](code/b/firstLLMIteration)
+  - [secondLLMIteration](code/b/secondLLMIteration)
+  - [thirdLLMIteration](code/b/thirdLLMIteration) <br>
+
+**Prompt: `I need a Web Service running on an EC2 and I need to send emails via Amazon SNS. Could you provide me with the terraform code`**
+
+
