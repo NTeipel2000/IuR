@@ -79,5 +79,14 @@ Das Passwort wird mit standardmäßig als `<Sensitive>` angezeigt, aber mit `non
     - [main.tf](code/b/thirdLLMIteration/main.tf): `aws_iam_policy` -> Least Privilege
   - Die EC2-Instanz erhält immer nur den minimal notwendigen Zugriff, um Mails senden zu können.
 - Verwenden Sie Checkov, um den Code nach Schwachstellen zu scannen. Werden Schwachstellen gefunden? Wenn ja, beschreiben sie, welche sie als kritisch einordnen würden und warum.
-  - .
+  - Erste Iteration: [Failed.txt](checkov/first/Failed.txt)
+    - CKV_AWS_8: Kritisch, da Daten im Klartext at Rest abgelegt werden
+    - CKV_AWS_26: Kritisch, da Daten ohne Verschlüsselung offengelegt werden könnten
+    - CKV_AWS_79: Kritisch, da IMDSv1 angreifbar ist
+    - CKV_AWS_260: Kritisch, da für jeden (Bots usw.) erreichbar (Situationsbedingt)
+  - Zweite Iteration: [Failed.txt](checkov/second/Failed.txt)
+    - Zuvor genannte (8, 26, 79, 260)
+    - CKV_AWS_24: Port 22 offen für alle. Ermöglicht Brute-Force-Angriffe
+  - Dritte Iteration: [Failed.txt](checkov/third/Failed.txt)
+    - Zuvor genannte (8, 26, 79, 260)
 - Hängen Sie die Ergebnisse des LLMs und von checkov als Datei an ihre Dokumentation an. checkov kann Ergebnisse direkt in eine Datei exportieren (--output-file-path OUTPUT_FILE_PATH).
