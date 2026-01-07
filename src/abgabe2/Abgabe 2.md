@@ -66,4 +66,18 @@ Das Passwort wird mit standardmäßig als `<Sensitive>` angezeigt, aber mit `non
 
 **Prompt: `I need a Web Service running on an EC2 and I need to send emails via Amazon SNS. Could you provide me with the terraform code`**
 
-
+**Führen Sie eine Sicherheitsüberprüfung des KI-generierten Codes durch.**
+- Insofern die KI IAM-Berechtigungen mittels Policies erstellt hat, überprüfen sie, ob die Policies dem Least-Privilege-Principle entsprechen.
+  - Erste Iteration:
+    - [iamRoleForEc2Access.tf](code/b/firstLLMIteration/iamRoleForEc2Access.tf): `aws_iam_role` -> Least Privilege
+    - [iamRoleForEc2Access.tf](code/b/firstLLMIteration/iamRoleForEc2Access.tf): `aws_iam_policy` -> Least Privilege
+  - Zweite Iteration:
+    - [iamRoleForEc2.tf](code/b/secondLLMIteration/iamRoleForEc2.tf): `aws_iam_role` -> Leas Privilege
+    - [iamRoleForEc2.tf](code/b/secondLLMIteration/iamRoleForEc2.tf): `aws_iam_role_policy` (Inline) -> Least Privilege
+  - Dritte Iteration:
+    - [main.tf](code/b/thirdLLMIteration/main.tf): `aws_iam_role` -> Least Privilege 
+    - [main.tf](code/b/thirdLLMIteration/main.tf): `aws_iam_policy` -> Least Privilege
+  - Die EC2-Instanz erhält immer nur den minimal notwendigen Zugriff, um Mails senden zu können.
+- Verwenden Sie Checkov, um den Code nach Schwachstellen zu scannen. Werden Schwachstellen gefunden? Wenn ja, beschreiben sie, welche sie als kritisch einordnen würden und warum.
+  - .
+- Hängen Sie die Ergebnisse des LLMs und von checkov als Datei an ihre Dokumentation an. checkov kann Ergebnisse direkt in eine Datei exportieren (--output-file-path OUTPUT_FILE_PATH).
