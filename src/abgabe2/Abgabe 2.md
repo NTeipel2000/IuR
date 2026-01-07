@@ -72,7 +72,7 @@ Das Passwort wird mit standardmäßig als `<Sensitive>` angezeigt, aber mit `non
     - [iamRoleForEc2Access.tf](code/b/firstLLMIteration/iamRoleForEc2Access.tf): `aws_iam_role` -> Least Privilege
     - [iamRoleForEc2Access.tf](code/b/firstLLMIteration/iamRoleForEc2Access.tf): `aws_iam_policy` -> Least Privilege
   - Zweite Iteration:
-    - [iamRoleForEc2.tf](code/b/secondLLMIteration/iamRoleForEc2.tf): `aws_iam_role` -> Leas Privilege
+    - [iamRoleForEc2.tf](code/b/secondLLMIteration/iamRoleForEc2.tf): `aws_iam_role` -> Least Privilege
     - [iamRoleForEc2.tf](code/b/secondLLMIteration/iamRoleForEc2.tf): `aws_iam_role_policy` (Inline) -> Least Privilege
   - Dritte Iteration:
     - [main.tf](code/b/thirdLLMIteration/main.tf): `aws_iam_role` -> Least Privilege 
