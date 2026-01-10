@@ -1,0 +1,32 @@
+---
+- name: Install and configure MariaDB on DB server
+  hosts: dbservers
+  become: yes
+  gather_facts: yes
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install MariaDB server
+      apt:
+        name: mariadb-server
+        state: present
+
+    - name: Ensure MariaDB service is running
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+
+    - name: Allow incoming traffic on MariaDB port
+      ufw:
+        rule: allow
+        port: "{{ db_port }}"
+        proto: tcp
+
+    - name: Ensure UFW is enabled
+      ufw:
+        state: enabled

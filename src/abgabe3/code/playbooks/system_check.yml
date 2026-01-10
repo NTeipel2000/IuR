@@ -1,0 +1,21 @@
+---
+- name: System Check & Update
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  tasks:
+
+    - name: Prüfen, ob Host erreichbar ist
+      ping:
+
+    - name: Paketlisten aktualisieren
+      apt:
+        update_cache: yes
+      register: update_result
+
+    - name: System aktualisieren, falls nötig
+      apt:
+        upgrade: dist
+        autoremove: yes
+      when: update_result is changed

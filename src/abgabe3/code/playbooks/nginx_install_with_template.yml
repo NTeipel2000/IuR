@@ -1,0 +1,50 @@
+---
+- name: Install and configure Nginx on web servers
+  hosts: webservers
+  become: yes
+  gather_facts: yes
+
+  tasks:
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure Nginx is running and enabled
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Deploy Nginx configuration from template
+      template:
+        src: ../templates/port_nginx.j2
+        dest: /etc/nginx/sites-available/default
+      notify: Restart Nginx
+
+    - name: Set start page with hostname
+      copy:
+        dest: /var/www/html/index.html
+        content: "Willkommen auf {{ inventory_hostname }}!"
+
+    - name: Check that port is reachable locally
+      wait_for:
+        host: 127.0.0.1
+        port: "{{ http_port }}"
+        timeout: 5
+      register: port_check
+
+    - name: Assert port is open
+      assert:
+        that:
+          - port_check is succeeded
+        fail_msg: "Port {{ http_port }} auf {{ inventory_hostname }} ist nicht erreichbar!"
+        success_msg: "Port {{ http_port }} auf {{ inventory_hostname }} ist erreichbar."
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
