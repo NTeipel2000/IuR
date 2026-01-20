@@ -56,14 +56,14 @@
 
     - name: Paketlisten aktualisieren
       apt:
-      update_cache: yes
-      register: update_result
+        update_cache: yes
+        register: update_result
 
     - name: System aktualisieren, falls nötig
       apt:
-      upgrade: dist
-      autoremove: yes
-      when: update_result is changed
+        upgrade: dist
+        autoremove: yes
+        when: update_result is changed
 
     ````
   - Testen mit `ansible-playbook playbooks/system_check.yml`:<br>
@@ -81,34 +81,34 @@
 
     - name: Install Nginx
       apt:
-      name: nginx
-      state: present
-      update_cache: yes
+        name: nginx
+        state: present
+        update_cache: yes
 
     - name: Ensure Nginx is running and enabled
       service:
-      name: nginx
-      state: started
-      enabled: yes
+        name: nginx
+        state: started
+        enabled: yes
 
     - name: Change default Nginx port to 8081
       lineinfile:
-      path: /etc/nginx/sites-available/default
-      regexp: '^\s*listen\s+80'
-      line: "        listen {{ http_port }};"
-      backrefs: yes
-      notify: Restart Nginx
+        path: /etc/nginx/sites-available/default
+        regexp: '^\s*listen\s+80'
+        line: "        listen {{ http_port }};"
+        backrefs: yes
+        notify: Restart Nginx
 
     - name: Set start page with hostname
       copy:
-      dest: /var/www/html/index.html
-      content: "Hostname: {{ inventory_hostname }}!"
+        dest: /var/www/html/index.html
+        content: "Hostname: {{ inventory_hostname }}!"
 
     handlers:
     - name: Restart Nginx
       service:
-      name: nginx
-      state: restarted
+        name: nginx
+        state: restarted
     ````
   - Testen mit `ansible-playbook playbooks/nginx_install.yml`:<br>
   ![3.3.png](img/3.3.png)
@@ -127,28 +127,28 @@
 
     - name: Update apt cache
       apt:
-      update_cache: yes
+        update_cache: yes
 
     - name: Install MariaDB server
       apt:
-      name: mariadb-server
-      state: present
+        name: mariadb-server
+        state: present
 
     - name: Ensure MariaDB service is running
       service:
-      name: mariadb
-      state: started
-      enabled: yes
+        name: mariadb
+        state: started
+        enabled: yes
 
     - name: Allow incoming traffic on MariaDB port
       ufw:
-      rule: allow
-      port: "{{ db_port }}"
-      proto: tcp
+        rule: allow
+        port: "{{ db_port }}"
+        proto: tcp
 
     - name: Ensure UFW is enabled
       ufw:
-      state: enabled
+        state: enabled
     ````
   - Testen mit `ansible-playbook playbooks/mariadb_install.yml`:<br>
   ![3.5.png](img/3.5.png)
@@ -188,46 +188,46 @@
 
     - name: Install Nginx
       apt:
-      name: nginx
-      state: present
-      update_cache: yes
+        name: nginx
+        state: present
+        update_cache: yes
 
     - name: Ensure Nginx is running and enabled
       service:
-      name: nginx
-      state: started
-      enabled: yes
+        name: nginx
+        state: started
+        enabled: yes
 
     - name: Deploy Nginx configuration from template
       template:
-      src: ../templates/port_nginx.j2
-      dest: /etc/nginx/sites-available/default
-      notify: Restart Nginx
+        src: ../templates/port_nginx.j2
+        dest: /etc/nginx/sites-available/default
+        notify: Restart Nginx
 
     - name: Set start page with hostname
       copy:
-      dest: /var/www/html/index.html
-      content: "Willkommen auf {{ inventory_hostname }}!"
+        dest: /var/www/html/index.html
+        content: "Willkommen auf {{ inventory_hostname }}!"
 
     - name: Check that port is reachable locally
       wait_for:
-      host: 127.0.0.1
-      port: "{{ http_port }}"
-      timeout: 5
-      register: port_check
+        host: 127.0.0.1
+        port: "{{ http_port }}"
+        timeout: 5
+        register: port_check
 
     - name: Assert port is open
       assert:
-      that:
-      - port_check is succeeded
-      fail_msg: "Port {{ http_port }} auf {{ inventory_hostname }} ist nicht erreichbar!"
-      success_msg: "Port {{ http_port }} auf {{ inventory_hostname }} ist erreichbar."
+        that:
+        - port_check is succeeded
+        fail_msg: "Port {{ http_port }} auf {{ inventory_hostname }} ist nicht erreichbar!"
+        success_msg: "Port {{ http_port }} auf {{ inventory_hostname }} ist erreichbar."
 
     handlers:
     - name: Restart Nginx
       service:
-      name: nginx
-      state: restarted
+        name: nginx
+        state: restarted
     ````
   - Testen mit `ansible-playbook playbooks/nginx_install_with_template.yml`:<br>
   - Anmerkung: SSH funktioniert scheinbar auf der ersten VM nicht mehr, ohne Änderungen vorgenommen zu haben.
